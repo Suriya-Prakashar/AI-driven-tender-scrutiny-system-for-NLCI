@@ -1,0 +1,196 @@
+/* Base */
+* {
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100%;
+    margin: 0;
+    font-family: system-ui, Arial, sans-serif;
+    background: url('bg-3.webp') center/cover no-repeat fixed;
+}
+
+/* Header */
+.header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #ffffff;
+    border-bottom: 1px solid #e5e7eb;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.header-content {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+}
+
+.logo {
+    width: 60px;
+    height: 60px;
+    border-radius: 6px;
+}
+
+/* Hero Section */
+.hero-center {
+    min-height: calc(100vh - 84px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 20px;
+}
+
+.hero-content {
+    width: 100%;
+    max-width: 600px;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 40px 30px;
+    border-radius: 16px;
+    text-align: center;
+    box-shadow: 0 8px 32px rgba(2, 6, 23, 0.08);
+}
+
+.hero-content h1 {
+    font-size: 32px;
+    margin-bottom: 16px;
+}
+
+/* Status Message Container */
+.status-message {
+    padding: 20px 24px;
+    border-radius: 12px;
+    margin: 24px 0;
+    text-align: center;
+    border: 2px solid;
+    transition: 0.3s ease;
+}
+
+.status-message p {
+    font-size: 18px;
+    font-weight: 600;
+}
+
+/* Success */
+.status-message.success {
+    background: rgba(16, 185, 129, 0.1);
+    border-color: #10b981;
+    color: #059669;
+}
+
+/* Warning */
+.status-message.warning {
+    background: rgba(245, 158, 11, 0.1);
+    border-color: #f59e0b;
+    color: #d97706;
+}
+
+/* Rotating Hourglass Animation */
+.rotate {
+    display: inline-block;
+    animation: spin 1s linear infinite;
+    margin-right: 6px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Buttons */
+.time-info { font-size: 16px; opacity: 0.9; }
+
+.button-group { margin-top: 24px; display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+
+.btn {
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    border: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.btn--primary {
+    background: #1caf9e;
+    color: white;
+}
+
+.btn--primary:hover {
+    background: #008c7a;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(28, 175, 158, 0.3);
+}
+
+.btn--primary:disabled {
+    background: #999;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.btn--secondary {
+    background: #1caf9e;
+    color: white;
+}
+
+.btn--secondary:hover {
+    background: #008c7a;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+}
+
+.btn--secondary:disabled {
+    background: #999;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.btn--download {
+    background: #10b981;
+    color: white;
+}
+
+.btn--download:hover {
+    background: #059669;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+/* Back Link */
+.back-link {
+    display: inline-block;
+    margin-top: 20px;
+    color: #1caf9e;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.back-link:hover {
+    color: #008c7a;
+    transform: translateY(-2px);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .hero-content {
+        padding: 30px 20px;
+    }
+
+    .status-message p {
+        font-size: 16px;
+    }
+
+    .button-group {
+        flex-direction: column;
+    }
+
+    .btn {
+        width: 100%;
+    }
+}
