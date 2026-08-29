@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import Header from "../../components/layout/Header";
 import { apiService } from "../../services/api";
 import "./Evaluation.css";
@@ -8,11 +8,13 @@ export const Evaluation = () => {
   const [files, setFiles] = useState([]);
   const [status, setStatus] = useState("not_started"); // not_started, running_eval, running_udyam, success_eval, success_udyam, failed_eval, failed_udyam, error_eval, error_udyam
   const [timerVal, setTimerVal] = useState("00:00");
-  const [buttonsDisabled, setButtonsDisabled] = useState(false);
   const [googleSheetsUrl, setGoogleSheetsUrl] = useState("https://docs.google.com/spreadsheets/d/1wkYCypcvEWqS1Uz-zOfoIpR9gdNjDoktTm50jc-eTL0/edit?usp=sharing");
   
   const timerIntervalRef = useRef(null);
   const finalTimeRef = useRef("00:00");
+
+  const location = useLocation();
+  const { autoStart, targetFiles } = location.state || {};
 
   useEffect(() => {
     // Fetch uploaded files list on mount
@@ -29,6 +31,15 @@ export const Evaluation = () => {
       }
     };
   }, []);
+
+  useEffect(() => {
+    if (autoStart && targetFiles && targetFiles.length > 0) {
+      handleStartEvaluation(targetFiles);
+      // Clear history state to prevent re-trigger on reload
+      window.history.replaceState({}, document.title);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [autoStart]);
 
   const startTimer = () => {
     if (timerIntervalRef.current) {
@@ -54,14 +65,19 @@ export const Evaluation = () => {
     }
   };
 
-  const handleStartEvaluation = async () => {
-    setButtonsDisabled(true);
+  const handleStartEvaluation = async (filesToRun) => {
+    const target = (filesToRun && Array.isArray(filesToRun)) ? filesToRun : files;
+    if (!target || target.length === 0) {
+      alert("No files available for evaluation.");
+      return;
+    }
+
     setStatus("running_eval");
     startTimer();
 
     try {
       // Call backend to trigger n8n evaluation workflow
-      const result = await apiService.startEvaluation(files);
+      const result = await apiService.startEvaluation(target);
       stopTimer();
 
       if (result.success) {
@@ -81,34 +97,10 @@ export const Evaluation = () => {
       console.error("Evaluation error:", err);
       stopTimer();
       setStatus("error_eval");
-    } finally {
-      setButtonsDisabled(false);
     }
   };
 
-  const handleStartUdyam = async () => {
-    setButtonsDisabled(true);
-    setStatus("running_udyam");
-    startTimer();
 
-    try {
-      // Call backend to trigger Udyam verification
-      const result = await apiService.verifyUdyam("webhook", files);
-      stopTimer();
-
-      if (result.success) {
-        setStatus("success_udyam");
-      } else {
-        setStatus("failed_udyam");
-      }
-    } catch (err) {
-      console.error("Udyam error:", err);
-      stopTimer();
-      setStatus("error_udyam");
-    } finally {
-      setButtonsDisabled(false);
-    }
-  };
 
   return (
     <div className="evaluation-page-container">
@@ -158,54 +150,7 @@ export const Evaluation = () => {
             </div>
           )}
 
-          {status === "running_udyam" && (
-            <div className="status-message warning">
-              <p>
-                <span className="rotate">⏳</span> Udyam Verification started... Please
-                wait.
-              </p>
-              <p>Elapsed Time: <span className="timer">{timerVal}</span></p>
-            </div>
-          )}
 
-          {status === "success_udyam" && (
-            <div className="status-message success">
-              <p>✅ Udyam Verification Completed!</p>
-              <p className="time-info">Time taken: {finalTimeRef.current}</p>
-            </div>
-          )}
-
-          {status === "failed_udyam" && (
-            <div className="status-message warning">
-              <p>⚠️ Udyam process failed. Check console.</p>
-              <p className="time-info">Time taken: {finalTimeRef.current}</p>
-            </div>
-          )}
-
-          {status === "error_udyam" && (
-            <div className="status-message warning">
-              <p>❌ Error: Unable to reach Udyam server.</p>
-              <p className="time-info">Check your connection.</p>
-            </div>
-          )}
-
-          {/* Buttons */}
-          <div className="button-group">
-            <button
-              onClick={handleStartEvaluation}
-              disabled={buttonsDisabled}
-              className="btn btn--primary"
-            >
-              {status === "running_eval" ? "Running..." : "Start Evaluation"}
-            </button>
-            <button
-              onClick={handleStartUdyam}
-              disabled={buttonsDisabled}
-              className="btn btn--secondary"
-            >
-              {status === "running_udyam" ? "Running..." : "Udyam Verification"}
-            </button>
-          </div>
 
           {/* Back Link */}
           <Link to="/merge" className="back-link">

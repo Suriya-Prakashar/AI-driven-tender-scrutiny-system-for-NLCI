@@ -10,10 +10,10 @@ export const Merge = () => {
   const [selectedLocalFiles, setSelectedLocalFiles] = useState([]);
   const [selectedUploadedFiles, setSelectedUploadedFiles] = useState([]);
   const [mergedFilename, setMergedFilename] = useState("");
-  const [message, setMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   const [confirmDialog, setConfirmDialog] = useState({ isOpen: false, message: "", onConfirm: null });
+  const [message, setMessage] = useState({ type: "", text: "" });
 
   useEffect(() => {
     fetchFiles();
@@ -28,7 +28,7 @@ export const Merge = () => {
       setSelectedUploadedFiles((prev) => prev.filter((name) => fetchedFiles.includes(name)));
     } catch (err) {
       console.error("Failed to fetch files:", err);
-      setMessage("Error loading uploaded files list.");
+      setMessage({ type: "error", text: "Error loading uploaded files list." });
     }
   };
 
@@ -49,29 +49,31 @@ export const Merge = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setMessage({ type: "", text: "" });
+    
     if (!selectedLocalFiles || selectedLocalFiles.length === 0) {
-      alert("Please select at least one PDF file to upload or merge.");
+      setMessage({ type: "error", text: "Please select at least one PDF file to upload or merge." });
       return;
     }
 
     setIsLoading(true);
-    setMessage("");
 
     try {
       const result = await apiService.mergeFiles(selectedLocalFiles, mergedFilename);
       if (result.success) {
-        setMessage("PDF file(s) uploaded and merged successfully!");
         setMergedFilename("");
         setSelectedLocalFiles([]);
         const fileInput = document.getElementById("files");
         if (fileInput) fileInput.value = "";
+        
         await fetchFiles();
+        setMessage({ type: "success", text: "PDF file(s) uploaded and merged successfully!" });
       } else {
-        setMessage(result.message || "Failed to upload or merge files.");
+        setMessage({ type: "error", text: result.message || "Failed to upload or merge files." });
       }
     } catch (err) {
       console.error("Merge error:", err);
-      setMessage(err.response?.data?.message || "An error occurred during upload/merge.");
+      setMessage({ type: "error", text: err.response?.data?.message || "An error occurred during upload/merge." });
     } finally {
       setIsLoading(false);
     }
@@ -92,15 +94,15 @@ export const Merge = () => {
     try {
       const result = await apiService.deleteFile(filename);
       if (result.success) {
-        setMessage(`File '${filename}' deleted successfully.`);
+        setMessage({ type: "success", text: `File '${filename}' deleted successfully.` });
         setSelectedUploadedFiles((prev) => prev.filter((name) => name !== filename));
         await fetchFiles();
       } else {
-        setMessage(result.message || "Failed to delete file.");
+        setMessage({ type: "error", text: result.message || "Failed to delete file." });
       }
     } catch (err) {
       console.error("Delete error:", err);
-      setMessage(err.response?.data?.message || "An error occurred while deleting the file.");
+      setMessage({ type: "error", text: err.response?.data?.message || "An error occurred while deleting the file." });
     } finally {
       setIsLoading(false);
     }
@@ -125,7 +127,7 @@ export const Merge = () => {
   const requestDeleteSelected = (e) => {
     if (e) e.preventDefault();
     if (selectedUploadedFiles.length === 0) {
-      alert("Please select at least one uploaded file to delete.");
+      setMessage({ type: "error", text: "Please select at least one uploaded file to delete." });
       return;
     }
     setConfirmDialog({
@@ -152,20 +154,21 @@ export const Merge = () => {
       }
 
       if (successCount > 0) {
-        setMessage(
-          `Successfully deleted ${successCount} file(s).${
+        setMessage({
+          type: "success",
+          text: `Successfully deleted ${successCount} file(s).${
             failCount > 0 ? ` Failed to delete ${failCount} file(s).` : ""
           }`
-        );
+        });
       } else {
-        setMessage("Failed to delete selected files.");
+        setMessage({ type: "error", text: "Failed to delete selected files." });
       }
 
       setSelectedUploadedFiles([]);
       await fetchFiles();
     } catch (err) {
       console.error("Batch delete error:", err);
-      setMessage("An error occurred while deleting selected files.");
+      setMessage({ type: "error", text: "An error occurred while deleting selected files." });
     } finally {
       setIsLoading(false);
     }
@@ -175,9 +178,9 @@ export const Merge = () => {
   const handleContinue = (e) => {
     if (files.length === 0) {
       e.preventDefault();
-      alert("⚠️ Please upload or merge at least one PDF file before continuing to evaluation!");
+      setMessage({ type: "error", text: "⚠️ Please upload or merge at least one PDF file before continuing to evaluation!" });
     } else {
-      navigate("/evaluation");
+      navigate("/evaluation", { state: { autoStart: true, targetFiles: files } });
     }
   };
 
@@ -241,8 +244,12 @@ export const Merge = () => {
             You can upload a single PDF file or select multiple files to merge into one document.
           </p>
 
-          {/* Flash / Custom Message */}
-          {message && <p className="message">{message}</p>}
+          {/* Flash / Custom Message Banner */}
+          {message.text && (
+            <div className={`status-message ${message.type === 'error' ? 'warning' : 'success'}`} style={{ marginBottom: "20px", marginTop: "10px" }}>
+              <p style={{ margin: 0 }}>{message.text}</p>
+            </div>
+          )}
 
           {/* Upload / Merge Form */}
           <form onSubmit={handleSubmit} className="upload-form">

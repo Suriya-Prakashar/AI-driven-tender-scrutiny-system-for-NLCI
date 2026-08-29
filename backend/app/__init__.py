@@ -5,8 +5,6 @@ from app.api.routes.evaluation_routes import evaluation_bp
 from app.api.routes.health_routes import health_bp
 from app.api.routes.merge_routes import merge_bp
 from app.api.routes.upload_routes import upload_bp
-from app.api.routes.udyam_routes import udyam_bp
-from app.api.routes.workflow_routes import workflow_bp
 from app.core.config import Config
 from app.core.logging import setup_logging
 
@@ -25,8 +23,6 @@ def create_app() -> Flask:
     app.register_blueprint(upload_bp)
     app.register_blueprint(merge_bp)
     app.register_blueprint(evaluation_bp)
-    app.register_blueprint(workflow_bp)
-    app.register_blueprint(udyam_bp)
 
     @app.errorhandler(413)
     def request_too_large(_error):

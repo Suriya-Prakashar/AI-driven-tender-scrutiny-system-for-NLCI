@@ -62,27 +62,7 @@ export const apiService = {
 
   // Evaluation / Scrutiny APIs
   startEvaluation: async (files) => {
-    const response = await apiClient.post("/workflow/start", { files });
-    return response.data;
-  },
-
-  getEvaluationStatus: async (jobId) => {
-    const response = await apiClient.get(`/workflow/status/${jobId}`);
-    return response.data;
-  },
-
-  // Udyam Verification APIs
-  verifyUdyam: async (mode = "webhook", files = null, excelPath = null) => {
-    const payload = { mode };
-    if (files) payload.files = files;
-    if (excelPath) payload.excel_path = excelPath;
-    
-    const response = await apiClient.post("/udyam/verify", payload);
-    return response.data;
-  },
-
-  getUdyamStatus: async (jobId) => {
-    const response = await apiClient.get(`/udyam/status/${jobId}`);
+    const response = await apiClient.post("/evaluation/start", { files });
     return response.data;
   },
 };
