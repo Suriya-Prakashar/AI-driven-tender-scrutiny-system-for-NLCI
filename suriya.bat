@@ -10,8 +10,7 @@ REM ----------------------
 REM Go to project folder
 cd /d "%PROJECT_DIR%"
 
-REM Start N8N (minimized)
-start "N8N" /min n8n.cmd
+
 
 REM Start Python app with NO console window
 REM If this fails, change pythonw.exe to python.exe
