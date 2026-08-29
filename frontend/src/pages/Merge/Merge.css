@@ -58,9 +58,9 @@ html, body {
 .hero-center {
     min-height: calc(100vh - 84px);
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: center;
-    padding: 40px 20px;
+    padding: 50px 20px;
 }
 
 .hero-content {
@@ -74,6 +74,8 @@ html, body {
     box-shadow: 0 8px 32px rgba(2, 6, 23, 0.08);
     border: 1px solid #e5e7eb;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
+    margin-top: auto;
+    margin-bottom: auto;
 }
 
 .hero-content:hover {
@@ -83,7 +85,7 @@ html, body {
 
 .hero-content h1 {
     margin: 0 0 16px 0;
-    font-size: 32px;
+    font-size: clamp(20px, 4.5vw, 32px);
     font-weight: 700;
     color: #1f2937;
 }
@@ -236,6 +238,132 @@ html, body {
     box-shadow: 0 8px 18px rgba(0, 0, 0, 0.12);
     transform: translateY(-3px);
     border-color: #1caf9e;
+}
+
+/* Local Selected Files Pre-Upload List */
+.local-selected-files {
+    margin-top: 12px;
+    padding: 12px 14px;
+    background: #f8fafc;
+    border: 1px dashed #cbd5e1;
+    border-radius: 8px;
+}
+
+.local-files-title {
+    margin: 0 0 8px 0;
+    font-size: 13px;
+    font-weight: 600;
+    color: #334155;
+}
+
+.local-files-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.local-file-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #ffffff;
+    padding: 6px 10px;
+    border-radius: 6px;
+    border: 1px solid #e2e8f0;
+    font-size: 13px;
+}
+
+.local-file-name {
+    word-break: break-all;
+    color: #1e293b;
+    font-weight: 500;
+}
+
+.remove-local-btn {
+    background: #fee2e2;
+    color: #991b1b;
+    border: 1px solid #fca5a5;
+    border-radius: 4px;
+    padding: 2px 8px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin-left: 8px;
+    flex-shrink: 0;
+}
+
+.remove-local-btn:hover {
+    background: #fecaca;
+    color: #7f1d1d;
+}
+
+/* Files Action Bar (Select All / Delete Selected) */
+.files-action-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    padding: 8px 12px;
+    background: #f1f5f9;
+    border-radius: 8px;
+}
+
+.select-all-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #334155;
+    cursor: pointer;
+}
+
+.select-all-label input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+    accent-color: #1caf9e;
+}
+
+.btn-delete-selected {
+    background: #dc2626;
+    color: #ffffff;
+    border: none;
+    border-radius: 6px;
+    padding: 6px 14px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-delete-selected:hover {
+    background: #b91c1c;
+    box-shadow: 0 2px 8px rgba(220, 38, 38, 0.3);
+}
+
+.file-checkbox {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+    accent-color: #1caf9e;
+    flex-shrink: 0;
+}
+
+.file-card.selected-card {
+    border-color: #1caf9e;
+    background-color: #f0fdfa;
+}
+
+.download-link-btn {
+    margin-right: 8px;
+    display: inline-block;
+    font-size: 14px;
+    padding: 8px 16px;
 }
 
 /* File Icon */
@@ -544,4 +672,3 @@ html, body {
         animation: none;
     }
 }
-

@@ -1,0 +1,159 @@
+.evaluation-page-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.evaluation-page-container .hero-center {
+  min-height: calc(100vh - 84px);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 50px 20px;
+}
+
+.evaluation-page-container .hero-content {
+  width: 100%;
+  max-width: 600px;
+  background: rgba(255, 255, 255, 0.9);
+  padding: 40px 30px;
+  border-radius: 16px;
+  text-align: center;
+  box-shadow: 0 8px 32px rgba(2, 6, 23, 0.08);
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+.evaluation-page-container .hero-content h1 {
+  font-size: clamp(20px, 4.5vw, 32px);
+  margin-bottom: 16px;
+  color: #1f2937;
+  font-weight: bold;
+}
+
+.evaluation-page-container .status-message {
+  padding: 20px 24px;
+  border-radius: 12px;
+  margin: 24px 0;
+  text-align: center;
+  border: 2px solid;
+  transition: 0.3s ease;
+}
+
+.evaluation-page-container .status-message p {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 4px 0;
+}
+
+.evaluation-page-container .status-message.success {
+  background: rgba(16, 185, 129, 0.1);
+  border-color: #10b981;
+  color: #059669;
+}
+
+.evaluation-page-container .status-message.warning {
+  background: rgba(245, 158, 11, 0.1);
+  border-color: #f59e0b;
+  color: #d97706;
+}
+
+.evaluation-page-container .rotate {
+  display: inline-block;
+  animation: evaluation-spin 1s linear infinite;
+  margin-right: 6px;
+}
+
+@keyframes evaluation-spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.evaluation-page-container .time-info {
+  font-size: 16px;
+  opacity: 0.9;
+}
+
+.evaluation-page-container .button-group {
+  margin-top: 24px;
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.evaluation-page-container .btn {
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  border: none;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.evaluation-page-container .btn--primary {
+  background: #1caf9e;
+  color: white;
+}
+
+.evaluation-page-container .btn--primary:hover {
+  background: #008c7a;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(28, 175, 158, 0.3);
+}
+
+.evaluation-page-container .btn--primary:disabled {
+  background: #999;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.evaluation-page-container .btn--secondary {
+  background: #1caf9e;
+  color: white;
+}
+
+.evaluation-page-container .btn--secondary:hover {
+  background: #008c7a;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+}
+
+.evaluation-page-container .btn--secondary:disabled {
+  background: #999;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.evaluation-page-container .back-link {
+  display: inline-block;
+  margin-top: 20px;
+  color: #1caf9e;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.evaluation-page-container .back-link:hover {
+  color: #008c7a;
+  transform: translateY(-2px);
+}
+
+@media (max-width: 768px) {
+  .evaluation-page-container .hero-content {
+    padding: 30px 20px;
+  }
+  .evaluation-page-container .status-message p {
+    font-size: 16px;
+  }
+  .evaluation-page-container .button-group {
+    flex-direction: column;
+  }
+  .evaluation-page-container .btn {
+    width: 100%;
+  }
+}
